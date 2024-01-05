@@ -8,12 +8,6 @@ import (
 type Server struct {
 }
 
-
-
-// ModifySeat implements TrainTicketServiceServer.
-func (*Server) ModifySeat(context.Context, *ModifySeatRequest) (*WasModifiedResponse, error) {
-	panic("unimplemented")
-}
 var TicketsArray []*Ticket = make([]*Ticket, 0)
 var globalUserArray []*User = make([]*User, 0)
 var SectionAUsers []*User = make([]*User, 0)
@@ -74,7 +68,20 @@ func (*Server) ViewUsersBySection(ctx context.Context, req  *ViewUsersBySectionR
 		return &ViewUsersBySectionResponse{Users: SectionBUsers}, nil
 	}
 }
-
+func (*Server) ModifySeat(ctx context.Context, req  *ModifySeatRequest) (*WasModifiedResponse, error) {
+	UserID := req.UserId;
+	TrainID := req.TrainId;
+	NewSection := req.NewSection;
+	NewSeat := req.NewSeat;
+	for i := 0; i < len(TicketsArray); i++ {
+		if TicketsArray[i].UserId == UserID && TicketsArray[i].TrainId == TrainID {
+			TicketsArray[i].Section = NewSection;
+			// Check for the change in section and update the global array
+			TicketsArray[i].Seat = NewSeat;
+			return &WasModifiedResponse{Success: true}, nil
+		}
+	}
+}
 // mustEmbedUnimplementedTrainTicketServiceServer implements TrainTicketServiceServer.
 func (*Server) mustEmbedUnimplementedTrainTicketServiceServer() {
 	panic("unimplemented")
