@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/nimeshjohari02/grpc-golang/train"
@@ -19,6 +20,22 @@ func main() {
 	if err != nil {
 		log.Fatalf("Unable to purchase ticket %v", err)
 	}
+	client.PurchaseTicket(context.Background(), &train.PurchaseTicketRequest{
+		From: "New York",
+		To: "Boston",
+		User: &train.User{
+			UserId: "1",
+			FirstName: "Nimesh",
+			EmailAddress: "nimesh@gmail.com",
+			HasTicket: false,
+		},
+		PriceOfTicket: 100,
+		Section: train.Section_SECTION_A,
+		TrainId: "1",
+	})
+
+
+
 }
 // Run the client
 // go run client.go

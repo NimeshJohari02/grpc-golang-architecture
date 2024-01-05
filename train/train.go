@@ -16,7 +16,20 @@ func (*Server) ModifySeat(context.Context, *ModifySeatRequest) (*WasModifiedResp
 
 // PurchaseTicket implements TrainTicketServiceServer.
 func (*Server) PurchaseTicket(context.Context, *PurchaseTicketRequest) (*Ticket, error) {
-	
+	// destucture the PurchaseTicketRequest to get User and Train
+	// Create a new ticket
+	// Save the ticket to the database
+	// return the ticket
+	// Destructure from field from PurchaseTicketRequest
+	created_ticket := &Ticket{
+		From : PurchaseTicketRequest.From,
+		To : &PurchaseTicketRequest.To,
+		UserId : &PurchaseTicketRequest.User.user_id,
+		PriceOfTicket: &PurchaseTicketRequest.PriceOfTicket,
+		Section : &PurchaseTicketRequest.Section,
+		Seat : &PurchaseTicketRequest.Seat,
+		TrainId: &PurchaseTicketRequest.train_id,
+	}
 	panic("unimplemented")
 }
 
