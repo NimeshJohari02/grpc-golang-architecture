@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TrainTicketService_SubmitPurchase_FullMethodName     = "/TrainTicketService/SubmitPurchase"
-	TrainTicketService_ViewReceipt_FullMethodName        = "/TrainTicketService/ViewReceipt"
-	TrainTicketService_ViewUsersBySection_FullMethodName = "/TrainTicketService/ViewUsersBySection"
-	TrainTicketService_RemoveUser_FullMethodName         = "/TrainTicketService/RemoveUser"
-	TrainTicketService_ModifySeat_FullMethodName         = "/TrainTicketService/ModifySeat"
+	TrainTicketService_PurchaseTicket_FullMethodName      = "/TrainTicketService/purchaseTicket"
+	TrainTicketService_ViewReceipt_FullMethodName         = "/TrainTicketService/ViewReceipt"
+	TrainTicketService_ViewUsersBySection_FullMethodName  = "/TrainTicketService/ViewUsersBySection"
+	TrainTicketService_RemoveUserFromTrain_FullMethodName = "/TrainTicketService/RemoveUserFromTrain"
+	TrainTicketService_ModifySeat_FullMethodName          = "/TrainTicketService/ModifySeat"
 )
 
 // TrainTicketServiceClient is the client API for TrainTicketService service.
@@ -31,15 +31,15 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TrainTicketServiceClient interface {
 	// API to submit a purchase for a ticket
-	SubmitPurchase(ctx context.Context, in *Ticket, opts ...grpc.CallOption) (*Ticket, error)
+	PurchaseTicket(ctx context.Context, in *PurchaseTicketRequest, opts ...grpc.CallOption) (*Ticket, error)
 	// API to show details of the receipt for the user
-	ViewReceipt(ctx context.Context, in *User, opts ...grpc.CallOption) (*Ticket, error)
+	ViewReceipt(ctx context.Context, in *ViewReceiptRequest, opts ...grpc.CallOption) (*Ticket, error)
 	// API to view users and seat they are allocated by section
 	ViewUsersBySection(ctx context.Context, in *ViewUsersBySectionRequest, opts ...grpc.CallOption) (*ViewUsersBySectionResponse, error)
 	// API to remove a user from the train
-	RemoveUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*RemoveUserResponse, error)
+	RemoveUserFromTrain(ctx context.Context, in *RemoveUserFromTrainRequest, opts ...grpc.CallOption) (*RemoveUserResponse, error)
 	// API to modify a user's seat
-	ModifySeat(ctx context.Context, in *ModifySeatRequest, opts ...grpc.CallOption) (*Ticket, error)
+	ModifySeat(ctx context.Context, in *ModifySeatRequest, opts ...grpc.CallOption) (*WasModifiedResponse, error)
 }
 
 type trainTicketServiceClient struct {
@@ -50,16 +50,16 @@ func NewTrainTicketServiceClient(cc grpc.ClientConnInterface) TrainTicketService
 	return &trainTicketServiceClient{cc}
 }
 
-func (c *trainTicketServiceClient) SubmitPurchase(ctx context.Context, in *Ticket, opts ...grpc.CallOption) (*Ticket, error) {
+func (c *trainTicketServiceClient) PurchaseTicket(ctx context.Context, in *PurchaseTicketRequest, opts ...grpc.CallOption) (*Ticket, error) {
 	out := new(Ticket)
-	err := c.cc.Invoke(ctx, TrainTicketService_SubmitPurchase_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TrainTicketService_PurchaseTicket_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trainTicketServiceClient) ViewReceipt(ctx context.Context, in *User, opts ...grpc.CallOption) (*Ticket, error) {
+func (c *trainTicketServiceClient) ViewReceipt(ctx context.Context, in *ViewReceiptRequest, opts ...grpc.CallOption) (*Ticket, error) {
 	out := new(Ticket)
 	err := c.cc.Invoke(ctx, TrainTicketService_ViewReceipt_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -77,17 +77,17 @@ func (c *trainTicketServiceClient) ViewUsersBySection(ctx context.Context, in *V
 	return out, nil
 }
 
-func (c *trainTicketServiceClient) RemoveUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*RemoveUserResponse, error) {
+func (c *trainTicketServiceClient) RemoveUserFromTrain(ctx context.Context, in *RemoveUserFromTrainRequest, opts ...grpc.CallOption) (*RemoveUserResponse, error) {
 	out := new(RemoveUserResponse)
-	err := c.cc.Invoke(ctx, TrainTicketService_RemoveUser_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TrainTicketService_RemoveUserFromTrain_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trainTicketServiceClient) ModifySeat(ctx context.Context, in *ModifySeatRequest, opts ...grpc.CallOption) (*Ticket, error) {
-	out := new(Ticket)
+func (c *trainTicketServiceClient) ModifySeat(ctx context.Context, in *ModifySeatRequest, opts ...grpc.CallOption) (*WasModifiedResponse, error) {
+	out := new(WasModifiedResponse)
 	err := c.cc.Invoke(ctx, TrainTicketService_ModifySeat_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -100,15 +100,15 @@ func (c *trainTicketServiceClient) ModifySeat(ctx context.Context, in *ModifySea
 // for forward compatibility
 type TrainTicketServiceServer interface {
 	// API to submit a purchase for a ticket
-	SubmitPurchase(context.Context, *Ticket) (*Ticket, error)
+	PurchaseTicket(context.Context, *PurchaseTicketRequest) (*Ticket, error)
 	// API to show details of the receipt for the user
-	ViewReceipt(context.Context, *User) (*Ticket, error)
+	ViewReceipt(context.Context, *ViewReceiptRequest) (*Ticket, error)
 	// API to view users and seat they are allocated by section
 	ViewUsersBySection(context.Context, *ViewUsersBySectionRequest) (*ViewUsersBySectionResponse, error)
 	// API to remove a user from the train
-	RemoveUser(context.Context, *User) (*RemoveUserResponse, error)
+	RemoveUserFromTrain(context.Context, *RemoveUserFromTrainRequest) (*RemoveUserResponse, error)
 	// API to modify a user's seat
-	ModifySeat(context.Context, *ModifySeatRequest) (*Ticket, error)
+	ModifySeat(context.Context, *ModifySeatRequest) (*WasModifiedResponse, error)
 	mustEmbedUnimplementedTrainTicketServiceServer()
 }
 
@@ -116,19 +116,19 @@ type TrainTicketServiceServer interface {
 type UnimplementedTrainTicketServiceServer struct {
 }
 
-func (UnimplementedTrainTicketServiceServer) SubmitPurchase(context.Context, *Ticket) (*Ticket, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitPurchase not implemented")
+func (UnimplementedTrainTicketServiceServer) PurchaseTicket(context.Context, *PurchaseTicketRequest) (*Ticket, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PurchaseTicket not implemented")
 }
-func (UnimplementedTrainTicketServiceServer) ViewReceipt(context.Context, *User) (*Ticket, error) {
+func (UnimplementedTrainTicketServiceServer) ViewReceipt(context.Context, *ViewReceiptRequest) (*Ticket, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ViewReceipt not implemented")
 }
 func (UnimplementedTrainTicketServiceServer) ViewUsersBySection(context.Context, *ViewUsersBySectionRequest) (*ViewUsersBySectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ViewUsersBySection not implemented")
 }
-func (UnimplementedTrainTicketServiceServer) RemoveUser(context.Context, *User) (*RemoveUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveUser not implemented")
+func (UnimplementedTrainTicketServiceServer) RemoveUserFromTrain(context.Context, *RemoveUserFromTrainRequest) (*RemoveUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveUserFromTrain not implemented")
 }
-func (UnimplementedTrainTicketServiceServer) ModifySeat(context.Context, *ModifySeatRequest) (*Ticket, error) {
+func (UnimplementedTrainTicketServiceServer) ModifySeat(context.Context, *ModifySeatRequest) (*WasModifiedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ModifySeat not implemented")
 }
 func (UnimplementedTrainTicketServiceServer) mustEmbedUnimplementedTrainTicketServiceServer() {}
@@ -144,26 +144,26 @@ func RegisterTrainTicketServiceServer(s grpc.ServiceRegistrar, srv TrainTicketSe
 	s.RegisterService(&TrainTicketService_ServiceDesc, srv)
 }
 
-func _TrainTicketService_SubmitPurchase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Ticket)
+func _TrainTicketService_PurchaseTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PurchaseTicketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrainTicketServiceServer).SubmitPurchase(ctx, in)
+		return srv.(TrainTicketServiceServer).PurchaseTicket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TrainTicketService_SubmitPurchase_FullMethodName,
+		FullMethod: TrainTicketService_PurchaseTicket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrainTicketServiceServer).SubmitPurchase(ctx, req.(*Ticket))
+		return srv.(TrainTicketServiceServer).PurchaseTicket(ctx, req.(*PurchaseTicketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _TrainTicketService_ViewReceipt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
+	in := new(ViewReceiptRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func _TrainTicketService_ViewReceipt_Handler(srv interface{}, ctx context.Contex
 		FullMethod: TrainTicketService_ViewReceipt_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrainTicketServiceServer).ViewReceipt(ctx, req.(*User))
+		return srv.(TrainTicketServiceServer).ViewReceipt(ctx, req.(*ViewReceiptRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -198,20 +198,20 @@ func _TrainTicketService_ViewUsersBySection_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrainTicketService_RemoveUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
+func _TrainTicketService_RemoveUserFromTrain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveUserFromTrainRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrainTicketServiceServer).RemoveUser(ctx, in)
+		return srv.(TrainTicketServiceServer).RemoveUserFromTrain(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TrainTicketService_RemoveUser_FullMethodName,
+		FullMethod: TrainTicketService_RemoveUserFromTrain_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrainTicketServiceServer).RemoveUser(ctx, req.(*User))
+		return srv.(TrainTicketServiceServer).RemoveUserFromTrain(ctx, req.(*RemoveUserFromTrainRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -242,8 +242,8 @@ var TrainTicketService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TrainTicketServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SubmitPurchase",
-			Handler:    _TrainTicketService_SubmitPurchase_Handler,
+			MethodName: "purchaseTicket",
+			Handler:    _TrainTicketService_PurchaseTicket_Handler,
 		},
 		{
 			MethodName: "ViewReceipt",
@@ -254,8 +254,8 @@ var TrainTicketService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TrainTicketService_ViewUsersBySection_Handler,
 		},
 		{
-			MethodName: "RemoveUser",
-			Handler:    _TrainTicketService_RemoveUser_Handler,
+			MethodName: "RemoveUserFromTrain",
+			Handler:    _TrainTicketService_RemoveUserFromTrain_Handler,
 		},
 		{
 			MethodName: "ModifySeat",

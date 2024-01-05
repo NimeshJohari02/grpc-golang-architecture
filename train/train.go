@@ -1,33 +1,32 @@
 package train
 
+// Import MongoDb driver libraries
 import (
-	"log"
-
-	"golang.org/x/net/context"
+	"context"
 )
 
 type Server struct {
 }
 
 
-
-// mustEmbedUnimplementedTrainTicketServiceServer implements TrainTicketServiceServer.
-func (*Server) mustEmbedUnimplementedTrainTicketServiceServer() {
-	panic("unimplemented")
-}
-
 // ModifySeat implements TrainTicketServiceServer.
-func (*Server) ModifySeat(context.Context, *ModifySeatRequest) (*Ticket, error) {
+func (*Server) ModifySeat(context.Context, *ModifySeatRequest) (*WasModifiedResponse, error) {
 	panic("unimplemented")
 }
 
-// SubmitPurchase implements TrainTicketServiceServer.
-func (*Server) SubmitPurchase(context.Context, *Ticket) (*Ticket, error) {
+// PurchaseTicket implements TrainTicketServiceServer.
+func (*Server) PurchaseTicket(context.Context, *PurchaseTicketRequest) (*Ticket, error) {
+	
+	panic("unimplemented")
+}
+
+// RemoveUserFromTrain implements TrainTicketServiceServer.
+func (*Server) RemoveUserFromTrain(context.Context, *RemoveUserFromTrainRequest) (*RemoveUserResponse, error) {
 	panic("unimplemented")
 }
 
 // ViewReceipt implements TrainTicketServiceServer.
-func (*Server) ViewReceipt(context.Context, *User) (*Ticket, error) {
+func (*Server) ViewReceipt(context.Context, *ViewReceiptRequest) (*Ticket, error) {
 	panic("unimplemented")
 }
 
@@ -36,7 +35,7 @@ func (*Server) ViewUsersBySection(context.Context, *ViewUsersBySectionRequest) (
 	panic("unimplemented")
 }
 
-func (s *Server) RemoveUser(ctx context.Context, user *User) (*RemoveUserResponse, error) {
-	log.Println("RemoveUser called with user: ", user.FirstName, user.LastName)
-	return &RemoveUserResponse{Success: true}, nil
+// mustEmbedUnimplementedTrainTicketServiceServer implements TrainTicketServiceServer.
+func (*Server) mustEmbedUnimplementedTrainTicketServiceServer() {
+	panic("unimplemented")
 }

@@ -30,7 +30,7 @@ message Ticket {
 message purchaseTicketRequest {
   string from = 1;
   string to = 2;
-  string user_id = 3;
+  User user = 3;
   float price_of_ticket = 4;
   Section section = 5;
   string train_id = 7;
