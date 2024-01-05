@@ -16,6 +16,7 @@ func (*Server) ModifySeat(context.Context, *ModifySeatRequest) (*Ticket, error) 
 
 // SubmitPurchase implements TrainTicketServiceServer.
 func (*Server) SubmitPurchase(context.Context, *Ticket) (*Ticket, error) {
+	// Take the ticket from the user and add it to the database
 	panic("unimplemented")
 }
 
@@ -29,10 +30,6 @@ func (*Server) ViewUsersBySection(context.Context, *ViewUsersBySectionRequest) (
 	panic("unimplemented")
 }
 
-// mustEmbedUnimplementedTrainTicketServiceServer implements TrainTicketServiceServer.
-func (*Server) mustEmbedUnimplementedTrainTicketServiceServer() {
-	panic("unimplemented")
-}
 
 func (s *Server) RemoveUser(ctx context.Context, user *User) (*RemoveUserResponse, error) {
 	log.Println("RemoveUser called with user: ", user.FirstName, user.LastName)
