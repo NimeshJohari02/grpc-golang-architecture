@@ -1,0 +1,52 @@
+syntax = "proto3";
+option go_package = "./train";
+enum Section {
+  SECTION_A = 0;
+  SECTION_B = 1;
+}
+
+message User {
+  string first_name = 1;
+  string last_name = 2;
+  string email_address = 3;
+}
+
+message Ticket {
+  string from = 1;
+  string to = 2;
+  User user = 3;
+  float price_paid = 4;
+  Section section = 5;
+  string seat = 6;
+}
+message RemoveUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ModifySeatRequest {
+  User user = 1;
+  string seat = 2;
+}
+message ViewUsersBySectionRequest {
+  Section section = 1;
+}
+message ViewUsersBySectionResponse {
+  repeated Ticket tickets = 1;
+}
+service TrainTicketService {
+  // API to submit a purchase for a ticket
+  rpc SubmitPurchase(Ticket) returns (Ticket);
+
+  // API to show details of the receipt for the user
+  rpc ViewReceipt(User) returns (Ticket);
+
+  // API to view users and seat they are allocated by section
+  rpc ViewUsersBySection(ViewUsersBySectionRequest) returns (ViewUsersBySectionResponse);
+
+  // API to remove a user from the train
+  rpc RemoveUser(User) returns (RemoveUserResponse);
+
+  // API to modify a user's seat
+  rpc ModifySeat(ModifySeatRequest) returns (Ticket);
+}
